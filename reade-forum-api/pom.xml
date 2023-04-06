@@ -28,5 +28,13 @@
             <version>1.0</version>
         </dependency>
 
+        <!--client-->
+<!--        <dependency>-->
+<!--            <groupId>cn.bugstack.reade.forum.client</groupId>-->
+<!--            <artifactId>reade-forum-client</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
+
+
     </dependencies>
 </project>

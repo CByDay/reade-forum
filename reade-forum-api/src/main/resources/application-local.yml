@@ -3,4 +3,13 @@ spring:
     url: jdbc:mysql://localhost:3306/jk_manage?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 123456789
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+#控制打印sql
+logging:
+  level:
+#    cn.bugstack.reade.forum.infrastructure.mapper 是 放置 mapper 的包名
+    cn.bugstack.reade.forum.infrastructure.mapper: debug

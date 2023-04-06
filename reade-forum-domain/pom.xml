@@ -11,7 +11,7 @@
 
     <groupId>cn.bugstack.reade.forum.domain</groupId>
     <artifactId>reade-forum-domain</artifactId>
-    <description>领域模型层</description>
+    <description>领域模型层（DDD的核心层 几乎全部的业务逻辑都会在该层实现）</description>
     <version>1.0</version>
 
     <properties>
@@ -20,6 +20,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+
+        <!-- 基础实施层 向其他层提供通用的技术能力(比如工具类,第三方库类支持,常用基本配置,数据访问底层实现) -->
+<!--        <dependency>-->
+<!--            <groupId>cn.bugstack.reade.forum.infrastructure</groupId>-->
+<!--            <artifactId>reade-forum-infrastructure</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
+
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

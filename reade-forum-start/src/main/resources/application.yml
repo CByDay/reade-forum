@@ -1,2 +1,12 @@
 server:
   port: 8089
+
+#cn.bugstack.reade.forum.
+
+spring:
+#  指定应用的名称，，在spring cloud中被用来注册的服务名。
+#  application:
+#    name: reade-forum
+  # 指定读取 yml 配置文件
+  profiles:
+    active: local

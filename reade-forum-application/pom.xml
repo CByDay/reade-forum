@@ -27,7 +27,8 @@
             <artifactId>reade-forum-client</artifactId>
             <version>1.0</version>
         </dependency>
-        <!--domain 内部依赖服务-->
+
+        <!--domain 领域模型层 业务逻辑都会在该层实现-->
         <dependency>
             <groupId>cn.bugstack.reade.forum.infrastructure</groupId>
             <artifactId>reade-forum-infrastructure</artifactId>

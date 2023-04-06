@@ -1,9 +1,16 @@
 package cn.bugstack.reade.forum.api.controller.base;
 
+import cn.bugstack.reade.forum.application.service.actor.ActorService;
+import cn.bugstack.reade.forum.client.service.Demo01;
+import cn.bugstack.reade.forum.application.vo.ActorVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @BelongsProject: reade-forum
@@ -33,17 +40,28 @@ public class IndexController {
         return "登录成功";
     }
 
-    @GetMapping("/islogin")
-    public String isLogin(){
-        // 验证是否登录
+    @Resource
+    private ActorService actorService;
 
-        return "已经登录";
+
+    @GetMapping("/queryAll")
+    public List<ActorVo> queryAll(){
+        try {
+            System.out.println("控制层进入");
+            List<ActorVo> actorVoList = actorService.findActorList();
+            System.out.println("执行完毕");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
-
-    @GetMapping("/out")
-    public String loginOut(){
-
-        return "注销成功";
+    @GetMapping("/testIs")
+    public String testIs()
+    {
+        Demo01 demo01 =new Demo01();
+        demo01.Demo001();
+        return "启动成功";
     }
 }

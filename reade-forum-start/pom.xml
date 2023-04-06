@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-<!--        api -->
+<!--     引入   api -->
         <dependency>
             <groupId>cn.bugstack.reade.forum.aip</groupId>
             <artifactId>reade-forum-api</artifactId>
