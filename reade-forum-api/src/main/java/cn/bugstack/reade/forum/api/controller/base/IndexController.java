@@ -1,15 +1,11 @@
 package cn.bugstack.reade.forum.api.controller.base;
 
 import cn.bugstack.reade.forum.application.service.actor.ActorService;
-import cn.bugstack.reade.forum.client.service.Demo01;
 import cn.bugstack.reade.forum.application.vo.ActorVo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,13 +51,5 @@ public class IndexController {
             throw new RuntimeException(e);
         }
         return null;
-    }
-
-    @GetMapping("/testIs")
-    public String testIs()
-    {
-        Demo01 demo01 =new Demo01();
-        demo01.Demo001();
-        return "启动成功";
     }
 }

@@ -11,7 +11,8 @@
 
     <groupId>cn.bugstack.reade.forum.infrastructure</groupId>
     <artifactId>reade-forum-infrastructure</artifactId>
-    <description>基础设施 向其他层提供通用的技术能力(比如工具类,第三方库类支持,常用基本配置,数据访问底层实现) </description>
+    <description>基础设施 向其他层提供通用的技术能力(比如工具类,第三方库类支持,常用基本配置,数据访问底层实现)
+    </description>
     <version>1.0</version>
 
     <properties>
@@ -29,8 +30,8 @@
         </dependency>
 
         <dependency>
-        <groupId>org.mybatis.spring.boot</groupId>
-        <artifactId>mybatis-spring-boot-starter</artifactId>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
         <!--spring-->
@@ -54,6 +55,16 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!--mapstruct-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <!--mapstruct生成映射器的注解处理器-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
         </dependency>
 
         <dependency>
