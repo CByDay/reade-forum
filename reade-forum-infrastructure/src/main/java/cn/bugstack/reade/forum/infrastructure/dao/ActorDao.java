@@ -1,4 +1,4 @@
-package cn.bugstack.reade.forum.infrastructure.domain;
+package cn.bugstack.reade.forum.infrastructure.dao;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @BelongsPackage: cn.bugstack.reade.forum.infrastructure.domain
  * @Author: zhd
  * @CreateTime: 2023-04-05  01:36
- * @Description: TODO
+ * @Description: 与数据库表 actor 对应
  * @Version: 1.0
  */
 

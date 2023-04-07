@@ -28,18 +28,33 @@
             <version>1.0</version>
         </dependency>
 
-        <!--domain 领域模型层 业务逻辑都会在该层实现-->
+        <!--domain 领域模型层 业务逻辑都会在该层实现
+        infrastructure 引用了 domain-->
         <dependency>
             <groupId>cn.bugstack.reade.forum.infrastructure</groupId>
             <artifactId>reade-forum-infrastructure</artifactId>
             <version>1.0</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.bugstack.reade.forum.domain</groupId>-->
+<!--            <artifactId>reade-forum-domain</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
 
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+        </dependency>
+        <!--mapstruct-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <!--mapstruct生成映射器的注解处理器-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
         </dependency>
     </dependencies>
 </project>

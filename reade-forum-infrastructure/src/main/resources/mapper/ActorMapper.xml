@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.bugstack.reade.forum.infrastructure.mapper.ActorMapper">
 
-    <select id="selectActor" resultType="cn.bugstack.reade.forum.infrastructure.domain.ActorDao">
+    <select id="selectActor" resultType="cn.bugstack.reade.forum.infrastructure.dao.ActorDao">
         select * from actor
     </select>
 

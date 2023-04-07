@@ -1,9 +1,9 @@
 package cn.bugstack.reade.forum.application.service.actor.impl;
 
+import cn.bugstack.reade.forum.application.converter.actor.ActorDtoConverter;
 import cn.bugstack.reade.forum.application.service.actor.ActorService;
-import cn.bugstack.reade.forum.application.vo.ActorVo;
-import cn.bugstack.reade.forum.domain.entity.ActorEntity;
-import cn.bugstack.reade.forum.domain.repository.actor.ActorRepository;
+import cn.bugstack.reade.forum.application.vo.actor.ActorVo;
+import cn.bugstack.reade.forum.domain.service.ActorTransferService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,18 +21,11 @@ import java.util.List;
 public class ActorServiceImpl implements ActorService {
 
     @Resource
-    private ActorRepository actorRepository;
+    private ActorTransferService actorTransferService;
 
     @Override
     public List<ActorVo> findActorList() {
-        List<ActorEntity> actorEntityList = null;
-        try {
-            System.out.println("进入actorRepository");
-            actorEntityList = actorRepository.queryAll();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return null;
+        System.out.println("进入application");
+        return  ActorDtoConverter.actorDtoConverter.toActorDto( actorTransferService.queryActorEntity());
     }
 }
