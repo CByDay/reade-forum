@@ -2,6 +2,7 @@ package cn.bugstack.reade.forum.api.controller.base;
 
 import cn.bugstack.reade.forum.application.service.actor.ActorService;
 import cn.bugstack.reade.forum.application.vo.actor.ActorVo;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,12 +14,14 @@ import java.util.List;
  * @BelongsPackage: cn.bugstack.reade.forum.api.controller.base
  * @Author: zhd
  * @CreateTime: 2023-04-03  23:45
- * @Description: TODO
+ * @Description:
  * @Version: 1.0
  */
 //@Controller
 //@RequestMapping("/index")
 @RestController
+//@CrossOrigin 解决 跨域问题
+@CrossOrigin
 //@RequestMapping("/actor")
 public class IndexController {
 
@@ -42,12 +45,6 @@ public class IndexController {
 
     @GetMapping("/queryAll")
     public List<ActorVo> queryAll(){
-        try {
-            System.out.println("进入controller");
-            return actorService.findActorList();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return actorService.findActorList();
     }
 }

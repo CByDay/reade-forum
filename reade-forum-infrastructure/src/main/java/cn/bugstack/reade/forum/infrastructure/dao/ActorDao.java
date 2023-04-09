@@ -1,6 +1,7 @@
 package cn.bugstack.reade.forum.infrastructure.dao;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @BelongsProject: reade-forum
@@ -13,6 +14,7 @@ import lombok.Data;
 
 
 @Data
+@EqualsAndHashCode //用去去重
 public class ActorDao {
     private String actorId;
 
