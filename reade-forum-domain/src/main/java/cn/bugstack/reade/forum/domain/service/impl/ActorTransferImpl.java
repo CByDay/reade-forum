@@ -22,6 +22,7 @@ public class ActorTransferImpl implements ActorTransferService {
 
     @Override
     public List<ActorEntity> queryActorEntity() {
+
         return actorRepository.queryAll();
     }
 }

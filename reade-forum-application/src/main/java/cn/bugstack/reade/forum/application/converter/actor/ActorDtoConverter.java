@@ -1,7 +1,9 @@
 package cn.bugstack.reade.forum.application.converter.actor;
 
 import cn.bugstack.reade.forum.application.vo.actor.ActorVo;
+import cn.bugstack.reade.forum.application.vo.actor.UserVO;
 import cn.bugstack.reade.forum.domain.entity.ActorEntity;
+import cn.bugstack.reade.forum.domain.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -22,6 +24,8 @@ public interface ActorDtoConverter {
     ActorDtoConverter actorDtoConverter = Mappers.getMapper(ActorDtoConverter.class);
 
     List<ActorVo> toActorDto(List<ActorEntity> actorEntityList);
+
+    UserVO toEntity(UserEntity userEntity);
 
 
 }

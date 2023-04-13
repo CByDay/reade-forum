@@ -4,6 +4,18 @@ spring:
     username: root
     password: 123456789
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    username: 1959337028@qq.com
+    password: sjtvybcgmzaobiad
+    port: 465
+    properties:
+      from: 1959337028@qq.com
+#      本地redis
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml

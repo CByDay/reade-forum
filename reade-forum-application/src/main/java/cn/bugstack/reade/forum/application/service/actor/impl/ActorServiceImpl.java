@@ -25,7 +25,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public List<ActorVo> findActorList() {
-        System.out.println("进入application");
         return  ActorDtoConverter.actorDtoConverter.toActorDto( actorTransferService.queryActorEntity());
     }
 }

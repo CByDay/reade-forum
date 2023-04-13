@@ -1,7 +1,9 @@
 package cn.bugstack.reade.forum.api.controller.base;
 
+import cn.bugstack.reade.forum.application.service.IUserService;
 import cn.bugstack.reade.forum.application.service.actor.ActorService;
 import cn.bugstack.reade.forum.application.vo.actor.ActorVo;
+import cn.bugstack.reade.forum.application.vo.actor.UserVO;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,12 +41,21 @@ public class IndexController {
         return "登录成功";
     }
 
+
     @Resource
     private ActorService actorService;
+
+    @Resource
+    private IUserService iUserService;
 
 
     @GetMapping("/queryAll")
     public List<ActorVo> queryAll(){
         return actorService.findActorList();
+    }
+
+    @GetMapping("/queryVO")
+    public UserVO queryVO(){
+        return iUserService.loginVo();
     }
 }
