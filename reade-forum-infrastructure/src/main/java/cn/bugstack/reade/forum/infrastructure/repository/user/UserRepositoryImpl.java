@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
+ * 直接操作是数据库
  * @author zhd
  * @date 2023/4/11
  * @description: user 操作
@@ -23,5 +24,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity loadUserByUserNameOrUserEmail(String userName) {
         return UserEntityConverter.userEntityConverter.toEntity(userMapper.loginUser(userName));
+    }
+
+    @Override
+    public int creatUserRepository(String username, String password, String email, String userId) {
+        System.out.println("username: "+username);
+        System.out.println("password: "+password);
+        System.out.println("email: "+email);
+        System.out.println("userId: "+userId);
+        return userMapper.creatUserMap(username, password, email, userId);
     }
 }

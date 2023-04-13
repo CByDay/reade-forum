@@ -3,18 +3,16 @@ package cn.bugstack.reade.forum.application.service.impl;
 import cn.bugstack.reade.forum.application.service.IUserLoginService;
 import cn.bugstack.reade.forum.domain.entity.UserEntity;
 import cn.bugstack.reade.forum.domain.service.UserTransferService;
-import cn.hutool.log.Log;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,6 +36,8 @@ public class UserLoginImpl implements IUserLoginService {
 
     @Resource
     StringRedisTemplate template;
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Resource
     MailSender mailSender;
@@ -73,10 +73,10 @@ public class UserLoginImpl implements IUserLoginService {
      * @return: boolean
      **/
     @Override
-    public boolean sendValidateEmail(String email, String sessionId) {
+    public String sendValidateEmail(String email, String sessionId) {
 
-        String authCode = (new Random().nextInt(8999999) + 100000)+"";
-        System.out.println("sessionId:  "+ sessionId);
+        String authCode = (new Random().nextInt(8999999) + 100000) + "";
+        System.out.println("sessionId:  " + sessionId);
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setFrom("1959337028@qq.com");
 //        message.setTo(emailCode);
@@ -96,11 +96,14 @@ public class UserLoginImpl implements IUserLoginService {
 //        StringRedisTemplate redisTemplate = new StringRedisTemplate();
         try {
 
-            if(Boolean.TRUE.equals(template.hasKey(key))){
-                Long expire =Optional.ofNullable(template.getExpire(key, TimeUnit.SECONDS)).orElse(0L);
-                if(expire > 120){
-                    return false;
+            if (Boolean.TRUE.equals(template.hasKey(key))) {
+                Long expire = Optional.ofNullable(template.getExpire(key, TimeUnit.SECONDS)).orElse(0L);
+                if (expire > 120) {
+                    return "操作频繁，请稍后再试";
                 }
+            }
+            if (userTransferService.loginUser(email) != null) {
+                return "此邮箱已被使用";
             }
 
             mail.setHostName("smtp.qq.com");//发送邮件的服务器,这个是qq邮箱的，不用修改
@@ -113,13 +116,50 @@ public class UserLoginImpl implements IUserLoginService {
 
 //            存 redis
             template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
+            System.out.println(key);
 
             mail.send();//发送
-            return true;
+            return null;
         } catch (EmailException e) {
             e.printStackTrace();
-            return false;
+            return "邮件发送失败，请联系管理员";
         }
 
+    }
+
+    /**
+     * @description:
+     * @author: zhd
+     * @date: 2023/4/13 19:51
+     * @param:
+     * @param: username
+     * @param: password
+     * @param: email
+     * @param: emailCode
+     * @return: boolean
+     **/
+    @Override
+    public String validateAndRegisterUser(String username, String password, String email, String emailCode, String sessionId) {
+        String key = "email:" + sessionId + ":" + email;
+        System.out.println(Boolean.TRUE.equals(template.hasKey(key)));
+        if (Boolean.TRUE.equals(template.hasKey(key))) {
+            System.out.println(Boolean.TRUE.equals(template.hasKey(key)));
+            String s = template.opsForValue().get(key);
+            if (s == null)
+                return "验证码失效，请重新发送";
+            if (s.equals(emailCode)) {
+                password = encoder.encode(password);
+                if (userTransferService.creatUser(username, password, email) > 0) {
+                    return null;
+                } else {
+                    return "内部错误，请联系管理员";
+                }
+            } else {
+                return "验证码错误，请重新发送";
+            }
+
+        } else {
+            return "请先发起验证码";
+        }
     }
 }

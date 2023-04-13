@@ -11,4 +11,6 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 public interface UserRepository {
 
     UserEntity loadUserByUserNameOrUserEmail(String userName);
+
+    int creatUserRepository(String username, String password, String email,String userId);
 }

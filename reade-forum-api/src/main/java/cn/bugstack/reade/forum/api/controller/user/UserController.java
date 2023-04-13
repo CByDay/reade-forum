@@ -6,6 +6,7 @@ import cn.bugstack.reade.forum.application.service.IUserLoginService;
 import cn.bugstack.reade.forum.infrastructure.utils.EmailUtil;
 import cn.bugstack.reade.forum.infrastructure.utils.ValidateCodeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,33 +30,32 @@ public class UserController {
     // 邮箱正则验证
     private final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
 
+    private final String USERNAME_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
+
     @Resource
     private IUserLoginService iUserLoginService;
 
     @PostMapping("/valid-emial")
-    public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("emailCode") String emailCode, HttpSession session) {
-        if(iUserLoginService.sendValidateEmail(emailCode,session.getId()))
+    public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("emailCode") String email, HttpSession session) {
+        String mes = iUserLoginService.sendValidateEmail(email, session.getId());
+        if (mes == null)
             return RestBean.success("邮件已发送，请注意查收");
         else
-            return RestBean.failure(400,"邮件发送失败，请稍后重试");
+            return RestBean.failure(400, mes);
     }
-//
-//        EmailUtil emailUtil = new EmailUtil();
-//        //获取邮箱
-////        String phone = user.getPhone();
-//        if (StringUtils.isNotEmpty(emailCode)) {
-//            //生成随机的4位验证码
-//            String code = ValidateCodeUtils.generateValidateCode(4).toString();
-////            log.info("code={}", code);
-//            System.out.println("code={}  " + code);
-//            //调用自己封装的qq邮箱发送器发送邮箱
-//            boolean isFlag = emailUtil.sendAuthCodeEmail(emailCode, code,session.getId());
-//            //需要将验证码保存到session中,做登录校验
-////            session.setAttribute(phone, code);
-////            session.setMaxInactiveInterval(60); //设置session有效期 60秒,这里以后可能会用redis,所以先不设置！
-//            System.out.println(isFlag);
-//            return RestBean.success("邮件已发送，请注意查收");
-//        }
-//        return RestBean.failure(400, "邮件发送失败，请稍后重试");
-//    }
+
+    @PostMapping("/register")
+    public RestBean<String> registerUser( @Length(min = 2, max = 8) @RequestParam("username") String username,
+                                          @Length(min = 6, max = 16) @RequestParam("password") String password,
+                                          @RequestParam("email") String email,
+                                         @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
+                                         HttpSession session) {
+
+        String mes = iUserLoginService.validateAndRegisterUser(username,password,email,emailCode,session.getId());
+        if (mes == null){
+            return RestBean.success("注册成功");
+        }else {
+            return RestBean.failure(400,"注册失败，验证码填写错误");
+        }
+    }
 }

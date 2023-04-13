@@ -1,6 +1,7 @@
 package cn.bugstack.reade.forum.application.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author zhd
@@ -17,5 +18,11 @@ public interface IUserLoginService extends UserDetailsService {
      * @param: url
      * @return: boolean
      **/
-    boolean sendValidateEmail(String emailCode,String sessionId);
+    String sendValidateEmail(String emailCode, String sessionId);
+
+    String validateAndRegisterUser(String username,
+                                    String password,
+                                    String email,
+                                    String emailCode,String sessionId);
+
 }

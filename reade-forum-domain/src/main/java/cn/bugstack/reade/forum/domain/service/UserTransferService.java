@@ -10,4 +10,6 @@ import cn.bugstack.reade.forum.domain.entity.UserEntity;
 public interface UserTransferService {
 
     UserEntity loginUser(String userName);
+
+    int creatUser(String username, String password, String email);
 }

@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
     UserDao loginUser(String userName);
+
+    int creatUserMap(String username, String password, String email,String userId);
 }
