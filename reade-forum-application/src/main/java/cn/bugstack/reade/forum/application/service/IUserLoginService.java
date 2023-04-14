@@ -21,8 +21,12 @@ public interface IUserLoginService extends UserDetailsService {
     String sendValidateEmail(String emailCode, String sessionId);
 
     String validateAndRegisterUser(String username,
-                                    String password,
-                                    String email,
-                                    String emailCode,String sessionId);
+                                   String password,
+                                   String email,
+                                   String emailCode,
+                                   String sessionId);
 
+    String retrievePassword(String email,
+                            String emailCode,
+                            String sessionId);
 }

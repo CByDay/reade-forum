@@ -35,7 +35,15 @@ public class UserController {
     @Resource
     private IUserLoginService iUserLoginService;
 
-    @PostMapping("/valid-emial")
+    /**
+     * @Description: 邮箱验证
+     * @Author: zhd
+     * @Date: 2023/4/15
+     * @param: email
+     * @param: session
+     * @return: RestBean<String>
+     **/
+    @PostMapping("/valid-email")
     public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("emailCode") String email, HttpSession session) {
         String mes = iUserLoginService.sendValidateEmail(email, session.getId());
         if (mes == null)
@@ -44,18 +52,52 @@ public class UserController {
             return RestBean.failure(400, mes);
     }
 
+    /**
+     * @Description: 新用户注册
+     * @Author: zhd
+     * @Date: 2023/4/14
+     * @param: username
+     * @param: password
+     * @param: email
+     * @param: emailCode
+     * @param: session
+     * @return: RestBean<String>
+     **/
     @PostMapping("/register")
-    public RestBean<String> registerUser( @Length(min = 2, max = 8) @RequestParam("username") String username,
-                                          @Length(min = 6, max = 16) @RequestParam("password") String password,
-                                          @RequestParam("email") String email,
+    public RestBean<String> registerUser(@Length(min = 2, max = 8) @RequestParam("username") String username,
+                                         @Length(min = 6, max = 16) @RequestParam("password") String password,
+                                         @RequestParam("email") String email,
                                          @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
                                          HttpSession session) {
 
-        String mes = iUserLoginService.validateAndRegisterUser(username,password,email,emailCode,session.getId());
-        if (mes == null){
+        String mes = iUserLoginService.validateAndRegisterUser(username, password, email, emailCode, session.getId());
+        if (mes == null) {
             return RestBean.success("注册成功");
-        }else {
-            return RestBean.failure(400,"注册失败，验证码填写错误");
+        } else {
+            return RestBean.failure(400, "注册失败，验证码填写错误");
+        }
+    }
+
+    /**
+     * @Description: 修改密码
+     * @Author: zhd
+     * @Date: 2023/4/15
+     * @Param:
+     * @param: email
+     * @param: emailCode
+     * @param: session
+     * @return: RestBean<String>
+     **/
+    @PostMapping("/retrievePassword")
+    public RestBean<String> retrievePassword(@RequestParam("email") String email,
+                                             @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
+                                             HttpSession session) {
+
+        String mes = iUserLoginService.retrievePassword(email, emailCode, session.getId());
+        if (mes == null) {
+            return RestBean.success("注册成功");
+        } else {
+            return RestBean.failure(400, "注册失败，验证码填写错误");
         }
     }
 }

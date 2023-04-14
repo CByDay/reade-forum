@@ -45,6 +45,13 @@ public class UserLoginImpl implements IUserLoginService {
     @Resource
     private MailSenderAutoConfiguration mailSenderAutoConfiguration;
 
+    /**
+     * @Description: 登录
+     * @Author: zhd
+     * @Date: 2023/4/15
+     * @param: username （用户名/邮箱） 均可登录
+     * @return: UserDetails
+     **/
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username.isEmpty()) {
@@ -62,7 +69,8 @@ public class UserLoginImpl implements IUserLoginService {
     }
 
     /**
-     * @description:邮箱验证 1.先生成对应的验证码
+     * @description:邮箱验证
+     * 1.先生成对应的验证码
      * 2.把邮箱和对应的验证码直接放到Redis里面（设置过期时间）
      * 3.发送验证码到指定邮箱
      * 4.如果发送失败，把Redis中插入的删除
@@ -117,8 +125,9 @@ public class UserLoginImpl implements IUserLoginService {
 //            存 redis
             template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
             System.out.println(key);
-
             mail.send();//发送
+            //创建完成后删除 redis 里面的key
+            template.delete(key);
             return null;
         } catch (EmailException e) {
             e.printStackTrace();
@@ -128,7 +137,7 @@ public class UserLoginImpl implements IUserLoginService {
     }
 
     /**
-     * @description:
+     * @description: 新用户注册
      * @author: zhd
      * @date: 2023/4/13 19:51
      * @param:
@@ -141,7 +150,6 @@ public class UserLoginImpl implements IUserLoginService {
     @Override
     public String validateAndRegisterUser(String username, String password, String email, String emailCode, String sessionId) {
         String key = "email:" + sessionId + ":" + email;
-        System.out.println(Boolean.TRUE.equals(template.hasKey(key)));
         if (Boolean.TRUE.equals(template.hasKey(key))) {
             System.out.println(Boolean.TRUE.equals(template.hasKey(key)));
             String s = template.opsForValue().get(key);
@@ -150,6 +158,8 @@ public class UserLoginImpl implements IUserLoginService {
             if (s.equals(emailCode)) {
                 password = encoder.encode(password);
                 if (userTransferService.creatUser(username, password, email) > 0) {
+                    //创建完成后删除 redis 里面的key
+                    template.delete(key);
                     return null;
                 } else {
                     return "内部错误，请联系管理员";
@@ -161,5 +171,50 @@ public class UserLoginImpl implements IUserLoginService {
         } else {
             return "请先发起验证码";
         }
+    }
+
+    /**
+     * @Description: 找回密码。
+     * 1.先进行邮箱校验，查询是否注册过
+     * 2.如果有，则可以发送验证码供其使用
+     * 3.如果则提示让其使用该邮箱注册
+     * @Author: zhd
+     * @Date: 2023/4/14
+     * @param: email
+     * @param: emailCode
+     * @param: sessionId
+     * @return: String
+     **/
+    @Override
+    public String retrievePassword(String email, String emailCode, String sessionId) {
+        String authCode = (new Random().nextInt(8999999) + 100000) + "";
+        String key = "email:" + sessionId + ":" + email;
+        SimpleEmail mail = new SimpleEmail();
+        if (null == userTransferService.loginUser(email)) {
+            return "此邮箱并未注册使用，请先去注册";
+        } else {
+            try {
+
+                mail.setHostName("smtp.qq.com");//发送邮件的服务器,这个是qq邮箱的，不用修改
+                mail.setAuthentication("1959337028@qq.com", "sjtvybcgmzaobiad");//第一个参数是对应的邮箱用户名一般就是自己的邮箱第二个参数就是SMTP的密码,我们上面获取过了
+                mail.setFrom("1959337028@qq.com", "mrs");  //发送邮件的邮箱和发件人
+                mail.setSSLOnConnect(false); //使用安全链接 (原来是 true)
+                mail.addTo(email);//接收的邮箱
+                mail.setSubject("验证码");//设置邮件的主题
+                mail.setMsg("尊敬的用户:你好!\n 验证码为:" + authCode + "\n" + "     (有效期为一分钟)");//设置邮件的内容
+
+                // 存 redis
+                template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
+                mail.send();//发送
+                //创建完成后删除 redis 里面的key
+                template.delete(key);
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "邮件发送失败，请联系管理员";
+            }
+        }
+
+
     }
 }

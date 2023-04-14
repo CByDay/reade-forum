@@ -25,7 +25,7 @@ public class TestValue implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         System.out.println(kafkaServers);
         System.out.println(topic);
-        System.out.println(host);
+        System.out.println("mail-host：   "+host);
     }
 
 }
