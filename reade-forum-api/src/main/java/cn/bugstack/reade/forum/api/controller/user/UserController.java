@@ -1,11 +1,7 @@
 package cn.bugstack.reade.forum.api.controller.user;
 
-import cn.bugstack.reade.forum.application.converter.R;
 import cn.bugstack.reade.forum.application.converter.RestBean;
 import cn.bugstack.reade.forum.application.service.IUserLoginService;
-import cn.bugstack.reade.forum.infrastructure.utils.EmailUtil;
-import cn.bugstack.reade.forum.infrastructure.utils.ValidateCodeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +24,9 @@ import javax.validation.constraints.Pattern;
 public class UserController {
 
     // 邮箱正则验证
-    private final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
 
-    private final String USERNAME_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
+    private static final String USERNAME_REGEX = "^[A-Za-z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
 
     @Resource
     private IUserLoginService iUserLoginService;
@@ -79,21 +75,46 @@ public class UserController {
     }
 
     /**
-     * @Description: 修改密码
+     * @Description: 修改密码第一步验证邮箱并发送验证码
      * @Author: zhd
      * @Date: 2023/4/15
-     * @Param:
      * @param: email
      * @param: emailCode
      * @param: session
      * @return: RestBean<String>
      **/
-    @PostMapping("/retrievePassword")
-    public RestBean<String> retrievePassword(@RequestParam("email") String email,
-                                             @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
-                                             HttpSession session) {
+    @PostMapping("/retrievePasswordA")
+    public RestBean<String> retrievePasswordA(@RequestParam("email") String email,
+                                              @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
+                                              HttpSession session) {
 
-        String mes = iUserLoginService.retrievePassword(email, emailCode, session.getId());
+        String mes = iUserLoginService.retrievePasswordA(email, emailCode, session.getId());
+        if (mes == null) {
+            return RestBean.success("注册成功");
+        } else {
+            return RestBean.failure(400, "注册失败，验证码填写错误");
+        }
+    }
+
+    /**
+     * @Description: 找回（修改）密码
+     * 1.找回密码需经过 retrievePasswordA 邮箱验证
+     * @Author: zhd
+     * @Date: 2023/4/15
+     * @param: email
+     * @param: emailCode
+     * @param: session
+     * @param: type 判断是找回密码 还是 修改密码
+     * @return: RestBean<String>
+     **/
+    @PostMapping("/retrievePasswordB")
+    public RestBean<String> retrievePasswordB(@RequestParam("email") String email,
+                                              @Length(min = 6, max = 16) @RequestParam("password") String password,
+                                              @Length(min = 6, max = 8) @RequestParam("emailCode") String emailCode,
+                                              HttpSession session,
+                                              String type) {
+
+        String mes = iUserLoginService.retrievePasswordB(email, password, emailCode, session.getId(), type);
         if (mes == null) {
             return RestBean.success("注册成功");
         } else {

@@ -1,16 +1,14 @@
 package cn.bugstack.reade.forum;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @BelongsProject: reade-forum
  * @BelongsPackage: org.example
  * @Author: zhd
  * @CreateTime: 2023-04-02  22:59
- * @Description: TODO
+ * @Description: 启动项
  * @Version: 1.0
  */
 @SpringBootApplication

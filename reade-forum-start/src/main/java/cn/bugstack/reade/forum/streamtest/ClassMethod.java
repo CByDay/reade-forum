@@ -1,4 +1,4 @@
-package cn.bugstack.reade.forum.streamTest;
+package cn.bugstack.reade.forum.streamtest;
 
 /**
  * @author zhd
@@ -18,7 +18,7 @@ public class ClassMethod {
     }
 
     public static void main(String[] args) {
-        subAuthorName("三更草堂", (str, start, length) -> str.substring(start,length));
+        subAuthorName("三更草堂", String::substring);
     }
 }
 

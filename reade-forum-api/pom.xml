@@ -28,13 +28,6 @@
             <version>1.0</version>
         </dependency>
 
-        <!--client-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.bugstack.reade.forum.client</groupId>-->
-        <!--            <artifactId>reade-forum-client</artifactId>-->
-        <!--            <version>1.0</version>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

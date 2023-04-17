@@ -7,7 +7,7 @@ import lombok.Data;
  * @BelongsPackage: cn.bugstack.reade.forum.domain.entity
  * @Author: zhd
  * @CreateTime: 2023-04-05  16:36
- * @Description: TODO
+ * @Description: 测试数据（无实际意义）
  * @Version: 1.0
  */
 @Data

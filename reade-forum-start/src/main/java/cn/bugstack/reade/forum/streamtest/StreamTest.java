@@ -1,15 +1,9 @@
-package cn.bugstack.reade.forum.streamTest;
+package cn.bugstack.reade.forum.streamtest;
 
-import cn.hutool.core.lang.func.VoidFunc1;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author zhd

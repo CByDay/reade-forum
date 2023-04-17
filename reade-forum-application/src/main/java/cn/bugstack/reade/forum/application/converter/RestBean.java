@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @author zhd
  * @date 2023/4/11
- * @description: 请求返回 JSON
+ * @description: 封装请求返回 JSON
  */
 @Data
 public class RestBean<T> {
@@ -16,8 +16,9 @@ public class RestBean<T> {
     //是否成功
     private boolean success;
 
-    //信息
+    //信息/数据
     private T message;
+
 
     private RestBean(int status, boolean success, T message) {
         this.status = status;

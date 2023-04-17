@@ -39,6 +39,7 @@
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 
+        <org.springframework.boot-version>2.7.7</org.springframework.boot-version>
     </properties>
 
     <parent>
@@ -50,29 +51,40 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--            org.springframework.boot 如下-->
+            <!-- 单元测试 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>2.7.7</version>
                 <scope>test</scope>
             </dependency>
+            <!-- Spring Security 是 Spring 中的一个安全管理框架  -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>1.2.58</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${org.springframework.boot-version}</version>
             </dependency>
+            <!-- 定时器-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-quartz</artifactId>
+            </dependency>
+
+            <!-- redis 库-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>2.3.11.RELEASE</version>
+            </dependency>
+            <!-- Lang组件主要是一些工具类，涉及到数组工具类，字符串工具类，字符工具类，数学方面，时间日期工具类，异常，事件等工具类-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.8</version>
             </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+
+            <!-- HttpComponents 项目就是专门设计来简化 HTTP 客户端与服务器进行各种通讯编程-->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
@@ -83,6 +95,7 @@
                 <artifactId>httpmime</artifactId>
                 <version>4.5.10</version>
             </dependency>
+            <!-- 测试 -->
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
@@ -96,7 +109,7 @@
                 <version>2.2.3</version>
                 <classifier>jdk15</classifier><!-- jdk版本 目前只有用jdk15可以通过编译 -->
             </dependency>
-            <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+            <!--hutool工具包-->
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
@@ -110,24 +123,18 @@
                 <version>${org.projectlombok.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct  在不同的对象模型（例如实体和 DTO）之间进行映射-->
+            <!-- mapstruct  在不同的对象模型（例如实体和 DTO）之间进行映射-->
             <!--mapstruct所需的注释，例如@Mapping 注意lombok必须放在mapstruct之前-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
-            <!--mapstruct生成映射器的注解处理器-->
+            <!--mapstruct 生成映射器的注解处理器-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${org.mapstruct.version}</version>
-            </dependency>
-
-            <!--        定时器-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-quartz</artifactId>
             </dependency>
 
             <!--mysql-->
@@ -193,27 +200,20 @@
                 <version>2.1.1</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-security</artifactId>
-                <version>2.7.7</version>
-            </dependency>
-
-
-            <!-- druid -->
+            <!-- druid 数据库连接池-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>1.1.21</version>
             </dependency>
+            <!--fastjson包-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>2.0.25</version>
             </dependency>
 
-            <!--邮箱验证登录导入的依赖 第一种 目前使用中-->
+            <!--邮箱验证登录导入的依赖 如下-->
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
@@ -229,8 +229,6 @@
                 <artifactId>mail</artifactId>
                 <version>1.4.1</version>
             </dependency>
-
-            <!--邮箱验证登录导入的依赖 第二种 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-validation</artifactId>
@@ -239,14 +237,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-mail</artifactId>
-                <version>2.7.7</version>
-            </dependency>
-
-<!--            redis-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>2.3.11.RELEASE</version>
+                <version>${org.springframework.boot-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

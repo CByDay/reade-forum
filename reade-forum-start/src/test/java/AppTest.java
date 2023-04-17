@@ -1,5 +1,5 @@
 import cn.bugstack.reade.forum.StartApplication;
-import cn.bugstack.reade.forum.streamTest.TestValue;
+import cn.bugstack.reade.forum.streamtest.TestValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @description:
  */
 @SpringBootTest(classes = StartApplication.class)
-public class AppTest {
+class AppTest {
 
     @Resource
     TestValue testValue;
@@ -33,11 +33,4 @@ public class AppTest {
         System.out.println(Boolean.TRUE.equals(template.hasKey("b")));
 
     }
-
-    @Test
-
-    public void test() {
-        System.out.println(testValue);
-    }
-
 }

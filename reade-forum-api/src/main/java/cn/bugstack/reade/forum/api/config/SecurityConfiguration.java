@@ -61,25 +61,28 @@ public class SecurityConfiguration {
             , PersistentTokenRepository repository) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests()
+                // 过滤所有 "/api/auth/" 前缀的接口
                 .antMatchers("/api/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
+                // 登录地址
                 .loginProcessingUrl("/api/auth/login")
                 .successHandler(this::onAuthenticationSuccess)
                 .failureHandler(this::onAuthenticationFailure)
                 .and()
                 .logout()
+                // 退出
                 .logoutUrl("/api/auth/logout")
                 .logoutSuccessHandler(this::onAuthenticationSuccess)
                 .and()
-//                配置页面上的记住我
+                // 配置页面上的记住我
                 .rememberMe()
                 .rememberMeParameter("remember")
                 .tokenRepository(repository)
-//                有效时间一周（可自行更改）
+                //  token有效时间一周（可自行更改）
                 .tokenValiditySeconds(3600 * 24 * 7)
                 .and()
                 .csrf()
@@ -97,9 +100,9 @@ public class SecurityConfiguration {
     @Bean
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        //        数据源位置
+        // 数据源位置
         jdbcTokenRepository.setDataSource(dataSource);
-        //        自动创建表/创建完成后要改成false
+        // 自动创建表/创建完成后要改成false
         jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
@@ -125,7 +128,7 @@ public class SecurityConfiguration {
     }
 
     /**
-     * @description: 使用自定义的用户校验规则
+     * @description: 使用自定义的用户校验规则（用户名密码校验）
      * @author: zhd
      * @date: 2023/4/11 21:59
      * @param:
@@ -164,6 +167,7 @@ public class SecurityConfiguration {
      **/
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
         if (request.getRequestURI().endsWith("login"))
             response.getWriter().write(JSONObject.toJSONString(RestBean.success("登录成功")));
         else if (request.getRequestURI().endsWith("logout")) {
@@ -183,6 +187,7 @@ public class SecurityConfiguration {
      **/
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.failure(401, exception.getMessage())));
     }
 }

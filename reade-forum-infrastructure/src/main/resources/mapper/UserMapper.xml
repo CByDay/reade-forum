@@ -3,12 +3,16 @@
 <mapper namespace="cn.bugstack.reade.forum.infrastructure.mapper.UserMapper">
 
     <select id="loginUser" resultType="cn.bugstack.reade.forum.infrastructure.dao.UserDao">
-        select *
+        select user_id, user_name, user_password, user_email
         from user
-        where user_name = '' #{userName} or user_email = #{userName}
+        where user_name = #{userName} or user_email = #{userName}
     </select>
 
     <insert id="creatUserMap" parameterType="cn.bugstack.reade.forum.infrastructure.dao.UserDao">
         insert into user (user_id, user_name, user_password, user_email) value (#{userId},#{username}, #{password}, #{email} )
     </insert>
+
+    <update id="changePassword" parameterType="cn.bugstack.reade.forum.infrastructure.dao.UserDao">
+        update user set user_password = #{password} where user_name = #{userName} or user_email = #{userName}
+    </update>
 </mapper>

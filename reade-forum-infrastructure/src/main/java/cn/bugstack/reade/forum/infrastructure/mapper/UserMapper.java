@@ -13,5 +13,7 @@ public interface UserMapper {
 
     UserDao loginUser(String userName);
 
-    int creatUserMap(String username, String password, String email,String userId);
+    int creatUserMap(String username, String password, String email, String userId);
+
+    int changePassword( String email,String password);
 }

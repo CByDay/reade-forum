@@ -1,5 +1,6 @@
-package cn.bugstack.reade.forum.streamTest;
+package cn.bugstack.reade.forum.streamtest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@Slf4j
 public class TestValue implements InitializingBean {
     @Value("${kafka.bootstrap.servers}")
     private String kafkaServers;
@@ -23,9 +25,9 @@ public class TestValue implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println(kafkaServers);
-        System.out.println(topic);
-        System.out.println("mail-host：   "+host);
+        log.info(kafkaServers);
+        log.info(topic);
+        log.info("mail-host：   "+host);
     }
 
 }

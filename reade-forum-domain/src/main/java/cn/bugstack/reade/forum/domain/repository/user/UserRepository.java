@@ -1,7 +1,6 @@
 package cn.bugstack.reade.forum.domain.repository.user;
 
 import cn.bugstack.reade.forum.domain.entity.UserEntity;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 /**
  * @author zhd
@@ -12,5 +11,7 @@ public interface UserRepository {
 
     UserEntity loadUserByUserNameOrUserEmail(String userName);
 
-    int creatUserRepository(String username, String password, String email,String userId);
+    int creatUserRepository(String username, String password, String email, String userId);
+
+    int changePassword(String username, String email, String password);
 }

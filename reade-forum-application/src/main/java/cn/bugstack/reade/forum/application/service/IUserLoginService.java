@@ -1,7 +1,6 @@
 package cn.bugstack.reade.forum.application.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author zhd
@@ -20,13 +19,39 @@ public interface IUserLoginService extends UserDetailsService {
      **/
     String sendValidateEmail(String emailCode, String sessionId);
 
+    /**
+     * @Description: 新用户注册并进行邮箱验证
+     * @Author: zhd 
+     * @Date: 2023/4/15
+     * @param: username
+     * @param: password
+     * @param: email
+     * @param: emailCode
+     * @param: sessionId
+     * @return: String
+     **/
     String validateAndRegisterUser(String username,
                                    String password,
                                    String email,
                                    String emailCode,
                                    String sessionId);
 
-    String retrievePassword(String email,
+    /**
+     * @Description: 修改密码
+     * @Author: zhd 
+     * @Date: 2023/4/15
+     * @param: email
+     * @param: emailCode
+     * @param: sessionId
+     * @return: String
+     **/
+    String retrievePasswordA(String email,
                             String emailCode,
                             String sessionId);
+
+    String retrievePasswordB(String email,
+                             String password,
+                             String emailCode,
+                             String sessionId,
+                             String type);
 }

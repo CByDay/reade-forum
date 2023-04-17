@@ -1,6 +1,5 @@
 package cn.bugstack.reade.forum.application.service.impl;
 
-import cn.bugstack.reade.forum.application.converter.actor.ActorDtoConverter;
 import cn.bugstack.reade.forum.application.service.IUserService;
 import cn.bugstack.reade.forum.application.vo.actor.UserVO;
 import cn.bugstack.reade.forum.domain.service.UserTransferService;

@@ -28,10 +28,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int creatUserRepository(String username, String password, String email, String userId) {
-        System.out.println("username: "+username);
-        System.out.println("password: "+password);
-        System.out.println("email: "+email);
-        System.out.println("userId: "+userId);
         return userMapper.creatUserMap(username, password, email, userId);
+    }
+
+    @Override
+    public int changePassword(String username, String email, String password) {
+        return userMapper.changePassword(email,password);
     }
 }

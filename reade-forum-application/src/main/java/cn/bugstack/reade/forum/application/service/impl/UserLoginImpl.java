@@ -3,6 +3,7 @@ package cn.bugstack.reade.forum.application.service.impl;
 import cn.bugstack.reade.forum.application.service.IUserLoginService;
 import cn.bugstack.reade.forum.domain.entity.UserEntity;
 import cn.bugstack.reade.forum.domain.service.UserTransferService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @description: 登录校验 （spring-boot-starter-security)
  */
 @Service
+@Slf4j
 public class UserLoginImpl implements IUserLoginService {
 
     @Value("${spring.mail.username}")
@@ -69,7 +71,7 @@ public class UserLoginImpl implements IUserLoginService {
     }
 
     /**
-     * @description:邮箱验证
+     * @description:发送验证码进行邮箱验证
      * 1.先生成对应的验证码
      * 2.把邮箱和对应的验证码直接放到Redis里面（设置过期时间）
      * 3.发送验证码到指定邮箱
@@ -84,7 +86,7 @@ public class UserLoginImpl implements IUserLoginService {
     public String sendValidateEmail(String email, String sessionId) {
 
         String authCode = (new Random().nextInt(8999999) + 100000) + "";
-        System.out.println("sessionId:  " + sessionId);
+        log.info("sessionId:  " + sessionId);
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setFrom("1959337028@qq.com");
 //        message.setTo(emailCode);
@@ -101,7 +103,6 @@ public class UserLoginImpl implements IUserLoginService {
 //
         String key = "email:" + sessionId + ":" + email;
         SimpleEmail mail = new SimpleEmail();
-//        StringRedisTemplate redisTemplate = new StringRedisTemplate();
         try {
 
             if (Boolean.TRUE.equals(template.hasKey(key))) {
@@ -124,10 +125,8 @@ public class UserLoginImpl implements IUserLoginService {
 
 //            存 redis
             template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
-            System.out.println(key);
+            log.info("key:  "+key);
             mail.send();//发送
-            //创建完成后删除 redis 里面的key
-            template.delete(key);
             return null;
         } catch (EmailException e) {
             e.printStackTrace();
@@ -149,27 +148,18 @@ public class UserLoginImpl implements IUserLoginService {
      **/
     @Override
     public String validateAndRegisterUser(String username, String password, String email, String emailCode, String sessionId) {
-        String key = "email:" + sessionId + ":" + email;
-        if (Boolean.TRUE.equals(template.hasKey(key))) {
-            System.out.println(Boolean.TRUE.equals(template.hasKey(key)));
-            String s = template.opsForValue().get(key);
-            if (s == null)
-                return "验证码失效，请重新发送";
-            if (s.equals(emailCode)) {
-                password = encoder.encode(password);
-                if (userTransferService.creatUser(username, password, email) > 0) {
-                    //创建完成后删除 redis 里面的key
-                    template.delete(key);
-                    return null;
-                } else {
-                    return "内部错误，请联系管理员";
-                }
-            } else {
-                return "验证码错误，请重新发送";
-            }
 
-        } else {
+        String str = userTransferService.creatUser(username, password, email, emailCode, sessionId);
+        if ("500".equals(str)) {
+            return "验证码错误，请重新发送";
+        } else if ("401".equals(str)) {
+            return "验证码失效，请重新发送";
+        } else if ("402".equals(str)) {
+            return "验证码错误，请重新发送";
+        } else if ("403".equals(str)) {
             return "请先发起验证码";
+        } else {
+            return null;
         }
     }
 
@@ -186,35 +176,58 @@ public class UserLoginImpl implements IUserLoginService {
      * @return: String
      **/
     @Override
-    public String retrievePassword(String email, String emailCode, String sessionId) {
-        String authCode = (new Random().nextInt(8999999) + 100000) + "";
-        String key = "email:" + sessionId + ":" + email;
-        SimpleEmail mail = new SimpleEmail();
-        if (null == userTransferService.loginUser(email)) {
+    public String retrievePasswordA(String email, String emailCode, String sessionId) {
+        String str = userTransferService.retrievePasswordAA(email, emailCode, sessionId);
+
+        if ("0".equals(str)) {
             return "此邮箱并未注册使用，请先去注册";
+        } else if ("401".equals(str)) {
+            return "邮件发送失败，请联系管理员";
         } else {
-            try {
-
-                mail.setHostName("smtp.qq.com");//发送邮件的服务器,这个是qq邮箱的，不用修改
-                mail.setAuthentication("1959337028@qq.com", "sjtvybcgmzaobiad");//第一个参数是对应的邮箱用户名一般就是自己的邮箱第二个参数就是SMTP的密码,我们上面获取过了
-                mail.setFrom("1959337028@qq.com", "mrs");  //发送邮件的邮箱和发件人
-                mail.setSSLOnConnect(false); //使用安全链接 (原来是 true)
-                mail.addTo(email);//接收的邮箱
-                mail.setSubject("验证码");//设置邮件的主题
-                mail.setMsg("尊敬的用户:你好!\n 验证码为:" + authCode + "\n" + "     (有效期为一分钟)");//设置邮件的内容
-
-                // 存 redis
-                template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
-                mail.send();//发送
-                //创建完成后删除 redis 里面的key
-                template.delete(key);
-                return null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "邮件发送失败，请联系管理员";
-            }
+            return null;
         }
 
+//
+//        String authCode = (new Random().nextInt(8999999) + 100000) + "";
+//        String key = "email:" + sessionId + ":" + email;
+//        SimpleEmail mail = new SimpleEmail();
+//        if (null == userTransferService.loginUser(email)) {
+//            return "此邮箱并未注册使用，请先去注册";
+//        } else {
+//            try {
+//
+//                mail.setHostName("smtp.qq.com");//发送邮件的服务器,这个是qq邮箱的，不用修改
+//                mail.setAuthentication("1959337028@qq.com", "sjtvybcgmzaobiad");//第一个参数是对应的邮箱用户名一般就是自己的邮箱第二个参数就是SMTP的密码,我们上面获取过了
+//                mail.setFrom("1959337028@qq.com", "mrs");  //发送邮件的邮箱和发件人
+//                mail.setSSLOnConnect(false); //使用安全链接 (原来是 true)
+//                mail.addTo(email);//接收的邮箱
+//                mail.setSubject("验证码");//设置邮件的主题
+//                mail.setMsg("尊敬的用户:你好!\n 验证码为:" + authCode + "\n" + "     (有效期为一分钟)");//设置邮件的内容
+//                // 存 redis
+//                template.opsForValue().set(key, authCode, 3, TimeUnit.MINUTES);
+//                mail.send();//发送
+//                //创建完成后删除 redis 里面的key
+//                template.delete(key);
+//                return null;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return "邮件发送失败，请联系管理员";
+//            }
+//        }
 
+
+    }
+
+    @Override
+    public String retrievePasswordB(String email, String passWord, String emailCode, String sessionId,String type) {
+        String str = userTransferService.retrievePasswordBB(email,passWord, emailCode, sessionId,type);
+
+        if ("0".equals(str)) {
+            return "此邮箱并未注册使用，请先去注册";
+        } else if ("401".equals(str)) {
+            return "邮件发送失败，请联系管理员";
+        } else {
+            return null;
+        }
     }
 }

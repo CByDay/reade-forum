@@ -1,33 +1,28 @@
-package cn.bugstack.reade.forum.streamTest;
+package cn.bugstack.reade.forum.streamtest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  * @author zhd
  * @date 2023/4/9
  * @description: 用于学习 stream 流
  */
-
 @Data
 @EqualsAndHashCode // 用于后期去重
 @NoArgsConstructor
 @AllArgsConstructor
-public class Author {
+public class Book {
 
     private Long id;
 
     private String name;
 
-    private Integer age;
+    private String category;
 
-    private String address;
+    private Integer score;
 
-    private List<Book> books;
-
-
+    private String intro;
 }

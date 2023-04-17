@@ -1,8 +1,6 @@
 package cn.bugstack.reade.forum.infrastructure.converter.user;
 
-import cn.bugstack.reade.forum.domain.entity.ActorEntity;
 import cn.bugstack.reade.forum.domain.entity.UserEntity;
-import cn.bugstack.reade.forum.infrastructure.dao.ActorDao;
 import cn.bugstack.reade.forum.infrastructure.dao.UserDao;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
